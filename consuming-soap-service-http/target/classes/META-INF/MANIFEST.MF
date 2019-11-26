@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Built-By: gouthami
+Build-Jdk: 10.0.2
+Class-Path: log4j-1.2.14.jar slf4j-api-1.5.10.jar jcl-over-slf4j-1.5.1
+ 0.jar slf4j-log4j12-1.5.10.jar itextpdf-5.3.4.jar commons-httpclient-
+ 3.1.jar commons-logging-1.0.4.jar commons-codec-1.2.jar surefire-juni
+ t4-2.6.jar surefire-api-2.6.jar
+Main-Class: com.ge.getworkersdocuments.ClientServiceTest
+Created-By: Maven Integration for Eclipse
+
