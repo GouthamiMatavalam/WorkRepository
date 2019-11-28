@@ -1,0 +1,40 @@
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://student.io/details/producing-student-web-service"
+           targetNamespace="http://student.io/details/producing-student-web-service" elementFormDefault="qualified">
+
+    <xs:element name="getStudentRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="name" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getStudentResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="student" type="tns:student"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="student">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="cgpa" type="xs:int"/>
+            <xs:element name="clazz" type="xs:int"/>
+            <xs:element name="grade" type="tns:grade"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="grade">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="A+"/>
+            <xs:enumeration value="A"/>
+            <xs:enumeration value="B+"/>
+            <xs:enumeration value="B"/>
+            <xs:enumeration value="C+"/>
+            <xs:enumeration value="C"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>
