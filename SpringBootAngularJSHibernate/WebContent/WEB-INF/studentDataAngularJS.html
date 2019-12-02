@@ -1,0 +1,217 @@
+<html>
+<head>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+ 
+<title>Spring Boot AngularJS example</title>
+<script type="text/javascript">
+            var app = angular.module("StudentManagement", []);
+         
+            //Controller Part
+            app.controller("StudentController", function($scope, $http) {
+         
+               
+                $scope.students = [];
+                $scope.studentForm = {
+                    id : -1,
+                    studentName : "",
+                    email : ""
+                };
+         
+                //Now load the data from server
+                _refreshStudentData();
+         
+                //HTTP POST/PUT methods for add/edit student 
+                // with the help of id, we are going to find out whether it is put or post operation
+                
+                $scope.submitStudent = function() {
+         
+                    var method = "";
+                    var url = "";
+                    if ($scope.studentForm.id == -1) {
+                        //Id is absent in form data, it is create new student operation
+                        method = "POST";
+                        url = '/addStudent';
+                    } else {
+                        //Id is present in form data, it is edit student operation
+                        method = "PUT";
+                        url = '/addStudent';
+                    }
+         
+                    $http({
+                        method : method,
+                        url : url,
+                        data : angular.toJson($scope.studentForm),
+                        headers : {
+                            'Content-Type' : 'application/json'
+                        }
+                    }).then( _success, _error );
+                };
+         
+                //HTTP DELETE- delete student by Id
+                $scope.deleteStudent = function(student) {
+                    $http({
+                        method : 'DELETE',
+                        url : '/deleteStudent/' + student.id
+                    }).then(_success, _error);
+                };
+ 
+             // In case of edit, populate form fields and assign form.id with student id
+                $scope.editStudent = function(student) {
+                  
+                    $scope.studentForm.studentName = student.studentName;
+                    $scope.studentForm.email = student.email;
+                    $scope.studentForm.id = student.id;
+                };
+         
+                /* Private Methods */
+                //HTTP GET- get all students collection
+                function _refreshStudentData() {
+                    $http({
+                        method : 'GET',
+                        url : 'http://localhost:8080/getAllStudents'
+                    }).then(function successCallback(response) {
+                        $scope.students = response.data;
+                    }, function errorCallback(response) {
+                        console.log(response.statusText);
+                    });
+                }
+         
+                function _success(response) {
+                    _refreshStudentData();
+                    _clearFormData()
+                }
+         
+                function _error(response) {
+                    console.log(response.statusText);
+                }
+         
+                //Clear the form
+                function _clearFormData() {
+                    $scope.studentForm.id = -1;
+                    $scope.studentForm.studentName = "";
+                    $scope.studentForm.email = "";
+                
+                };
+            });
+        </script>
+<style>
+.blue-button {
+	background: #25A6E1;
+	filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#25A6E1',
+		endColorstr='#188BC0', GradientType=0);
+	padding: 3px 5px;
+	color: #fff;
+	font-family: 'Helvetica Neue', sans-serif;
+	font-size: 12px;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 4px;
+	border: 1px solid #1A87B9
+}
+ 
+.red-button {
+	background: #CD5C5C;
+	padding: 3px 5px;
+	color: #fff;
+	font-family: 'Helvetica Neue', sans-serif;
+	font-size: 12px;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 4px;
+	border: 1px solid #CD5C5C
+}
+ 
+table {
+	font-family: "Helvetica Neue", Helvetica, sans-serif;
+	width: 50%;
+}
+ 
+caption {
+	text-align: left;
+	color: silver;
+	font-weight: bold;
+	text-transform: uppercase;
+	padding: 5px;
+}
+ 
+th {
+	background: SteelBlue;
+	color: white;
+}
+ 
+tbody tr:nth-child(even) {
+	background: WhiteSmoke;
+}
+ 
+tbody tr td:nth-child(2) {
+	text-align: center;
+}
+ 
+tbody tr td:nth-child(3), tbody tr td:nth-child(4) {
+	text-align: center;
+	font-family: monospace;
+}
+ 
+tfoot {
+	background: SeaGreen;
+	color: white;
+	text-align: right;
+}
+ 
+tfoot tr th:last-child {
+	font-family: monospace;
+}
+ 
+td, th {
+	border: 1px solid gray;
+	width: 25%;
+	text-align: left;
+	padding: 5px 10px;
+}
+</style>
+<head>
+<body ng-app="StudentManagement" ng-controller="StudentController">
+	<h1>Student Mart</h1>
+	<form ng-submit="submitStudent()">
+		<table>
+ 
+			<tr>
+				<th colspan="2">Add/Edit student</th>
+			</tr>
+			<tr>
+				<td>Student Name</td>
+				<td><input type="text" ng-model="studentForm.studentName" /></td>
+			</tr>
+			<tr>
+				<td>Email</td>
+				<td><input type="text" ng-model="studentForm.email" /></td>
+			</tr>
+			<tr>
+				<td colspan="2"><input type="submit" value="Submit"
+					class="blue-button" /></td>
+			</tr>
+		</table>
+	</form>
+	<table>
+		<tr>
+ 
+			<th>Student Name</th>
+			<th>Email</th>
+			<th>Operations</th>
+ 
+		</tr>
+ 
+		<tr ng-repeat="student in students">
+ 
+			<td>{{ student.studentName }}</td>
+			<td>{{ student.email }}</td>
+ 
+			<td><a ng-click="editStudent(student)" class="blue-button">Edit</a>
+				| <a ng-click="deleteStudent(student)" class="red-button">Delete</a></td>
+		</tr>
+ 
+	</table>
+</body>
+</html>
+ 
