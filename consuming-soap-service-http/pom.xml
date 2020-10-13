@@ -9,7 +9,7 @@
   
 	<properties>
 		<org.slf4j.version>1.5.10</org.slf4j.version>	
-		<org.junit.version>4.4</org.junit.version>	
+		<org.junit.version>4.13.1</org.junit.version>	
 		<org.itext.version>5.3.4</org.itext.version>
 		<org.log4j.version>1.2.14</org.log4j.version>		
 	</properties>
